@@ -1,0 +1,206 @@
+﻿@page "/test2"
+@using Microsoft.Azure.ServiceBus
+@using System.Text
+@using System.Text.Json
+@using System.Data
+@using Microsoft.Data.SqlClient
+
+
+<form class="login-form">
+    <div class="form-block">
+        <h4 class="title">Shipping Bay 1</h4>
+        <div class="mb-3 w-55">
+            <label for="rackNumber" class="form-label label">Rack Number:</label>
+            <input type="text" class="form-control" id="rackNumber" @ref="rackNumberRef" @onkeyup="@HandleTextBox1KeyPress" placeholder="Enter Rack Number" @bind="RackNumber" required />
+        </div>
+        <div class="mb-3 w-55">
+            <label for="barcode" class="form-label label">Barcode:</label>
+            <input type="text" class="form-control" id="barcode" @ref="barcodeRef" @onkeyup="@HandleTextBox2KeyPress" placeholder="Enter Barcode" @bind="Barcode" required />
+        </div>
+        <button type="button" class="btn btn-primary w-100" disabled="@isProcessing" @onclick="SubmitForm">Submit</button>
+        @if (error)
+        {
+            <label class="error-message">@errorMessage</label>
+        }
+        else if (success)
+        {
+            <label class="success-message">@errorMessage</label>
+        }
+    </div>
+</form>
+
+<style>
+    .login-form {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        min-height: 100vh;
+        padding: 20px;
+        box-sizing: border-box;
+        overflow-y: auto; /* Enable vertical scrolling */
+    }
+
+    .form-block {
+        width: 100%;
+        max-width: 400px;
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .title {
+        font-weight: bold;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .label {
+        font-weight: bold;
+    }
+
+    .btn-primary {
+        margin-top: 20px;
+    }
+
+    .error-message, .success-message {
+        display: block;
+        margin-top: 20px;
+        text-align: center;
+        font-weight: bold;
+        color: #a80707;
+    }
+
+    .success-message {
+        color: #0f6e04;
+    }
+
+    .w-100 {
+        width: 100%;
+    }
+
+    /* Autocomplete styles remain unchanged */
+    .autocomplete {
+        position: relative;
+    }
+
+        .autocomplete .options {
+            position: absolute;
+            top: 40px;
+            left: 0;
+            background: white;
+            width: 100%;
+            padding: 0;
+            z-index: 10;
+            border: 1px solid #ced4da;
+            border-radius: 0.5rem;
+            box-shadow: 0 30px 25px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .autocomplete .option {
+            display: block;
+            padding: 0.25rem;
+        }
+
+            .autocomplete .option .option-text {
+                padding: 0.25rem 0.5rem;
+            }
+
+            .autocomplete .option:hover {
+                background: #1E90FF;
+                color: #fff;
+            }
+
+            .autocomplete .option.disabled {
+                background-color: lightgrey;
+                cursor: not-allowed;
+            }
+
+                .autocomplete .option.disabled:hover {
+                    background: lightgrey;
+                    color: var(--bs-body);
+                }
+</style>
+
+
+
+
+@code {
+    public string RackNumber { get; set; } = string.Empty;
+    public string Barcode { get; set; } = string.Empty;
+    private bool isProcessing = false;
+    bool error = false;
+    bool success = false;
+    string errorMessage = "";
+    private ElementReference rackNumberRef;
+    private ElementReference barcodeRef;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await rackNumberRef.FocusAsync();
+        }
+    }
+
+    private async Task HandleTextBox1KeyPress(KeyboardEventArgs e)
+    {
+        if (e.Code == "Enter")
+            await barcodeRef.FocusAsync();
+    }
+
+    private async Task HandleTextBox2KeyPress(KeyboardEventArgs e)
+    {
+        if (e.Code == "Enter")
+            await SubmitForm();
+    }
+
+    async Task SubmitForm()
+    {
+        isProcessing = true;
+        QueueClient queueClient;
+        string sbConnectionString = "*****SeviceBusConnectionString*****";
+        string sbQueueName = "***QueueName***";
+        try
+        {
+            if (!string.IsNullOrWhiteSpace(RackNumber) && !string.IsNullOrWhiteSpace(Barcode))
+            {
+                var data = new { RackCode = RackNumber, BarcodeNumber = Barcode };
+                queueClient = new QueueClient(sbConnectionString, sbQueueName);
+                string messageBody = JsonSerializer.Serialize(data);
+                var message = new Message(Encoding.UTF8.GetBytes(messageBody));
+                await queueClient.SendAsync(message);
+                await queueClient.CloseAsync();
+                success = true;
+                error = false;
+                errorMessage = "Successful.";
+                StateHasChanged();
+            }
+            else
+            {
+                success = false;
+                error = true;
+                errorMessage = $"RackNumber and Barcode must not be empty.";
+                StateHasChanged();
+            }
+
+        }
+        catch (Exception ex)
+        {
+            success = false;
+            error = true;
+            errorMessage = $"RackNumber and Barcode must not be empty.";
+            StateHasChanged();
+        }
+        finally
+        {
+            Barcode = string.Empty;
+            RackNumber = string.Empty;
+            isProcessing = false;
+            await rackNumberRef.FocusAsync();
+            StateHasChanged();
+            await Task.Delay(4000);
+            errorMessage = string.Empty;
+        }
+    }
+}

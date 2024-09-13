@@ -1,0 +1,1 @@
+C:\Users\PMachani\Desktop\Projects\Git\Scanner\Scanner\Scanner.csproj;x64

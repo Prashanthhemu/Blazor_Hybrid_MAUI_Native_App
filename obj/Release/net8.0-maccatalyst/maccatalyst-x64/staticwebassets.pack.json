@@ -1,0 +1,45 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Users\\PMachani\\Desktop\\Projects\\Git\\Scanner\\Scanner\\obj\\Release\\net8.0-maccatalyst\\maccatalyst-x64\\scopedcss\\bundle\\Scanner.styles.css",
+      "PackagePath": "staticwebassets\\Scanner.styles.css"
+    },
+    {
+      "Id": "C:\\Users\\PMachani\\Desktop\\Projects\\Git\\Scanner\\Scanner\\wwwroot\\css\\app.css",
+      "PackagePath": "staticwebassets\\css\\app.css"
+    },
+    {
+      "Id": "C:\\Users\\PMachani\\Desktop\\Projects\\Git\\Scanner\\Scanner\\wwwroot\\css\\bootstrap\\bootstrap.min.css",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\bootstrap.min.css"
+    },
+    {
+      "Id": "C:\\Users\\PMachani\\Desktop\\Projects\\Git\\Scanner\\Scanner\\wwwroot\\css\\bootstrap\\bootstrap.min.css.map",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\bootstrap.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\PMachani\\Desktop\\Projects\\Git\\Scanner\\Scanner\\wwwroot\\favicon.png",
+      "PackagePath": "staticwebassets\\favicon.png"
+    },
+    {
+      "Id": "C:\\Users\\PMachani\\Desktop\\Projects\\Git\\Scanner\\Scanner\\wwwroot\\index.html",
+      "PackagePath": "staticwebassets\\index.html"
+    },
+    {
+      "Id": "obj\\Release\\net8.0-maccatalyst\\maccatalyst-x64\\staticwebassets\\msbuild.Scanner.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Release\\net8.0-maccatalyst\\maccatalyst-x64\\staticwebassets\\msbuild.build.Scanner.props",
+      "PackagePath": "build\\Scanner.props"
+    },
+    {
+      "Id": "obj\\Release\\net8.0-maccatalyst\\maccatalyst-x64\\staticwebassets\\msbuild.buildMultiTargeting.Scanner.props",
+      "PackagePath": "buildMultiTargeting\\Scanner.props"
+    },
+    {
+      "Id": "obj\\Release\\net8.0-maccatalyst\\maccatalyst-x64\\staticwebassets\\msbuild.buildTransitive.Scanner.props",
+      "PackagePath": "buildTransitive\\Scanner.props"
+    }
+  ],
+  "ElementsToRemove": []
+}
